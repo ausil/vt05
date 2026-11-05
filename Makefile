@@ -1,4 +1,6 @@
 all: vt05 vt52 vt50 dp3300 gecon dm2500
+BINARIES=vt05 vt52 vt50 dp3300 gecon dm2500
+.PHONY: all clean
 WARN=-Wall -Wno-unused-parameter -Wno-parentheses -Wno-unused-result
 DEPS=`sdl2-config --libs --cflags` -lm -lpthread
 vt05: vt05.c terminal.c vt05chars.h args.h
@@ -13,3 +15,5 @@ gecon: gecon.c terminal.c dpchars.h args.h
 	cc $(WARN) -O3 -o $@ gecon.c terminal.c $(DEPS)
 dm2500: dm2500.c terminal.c dmchars.h args.h
 	cc $(WARN) -O3 -o dm2500 dm2500.c terminal.c $(DEPS)
+clean:
+	rm -f $(BINARIES)
