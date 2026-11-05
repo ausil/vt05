@@ -1,0 +1,68 @@
+.Dd November 5, 2026
+.Dt VT05 1
+.Os
+.Sh NAME
+.Nm vt05 ,
+.Nm vt50 ,
+.Nm vt52 ,
+.Nm dp3300 ,
+.Nm gecon ,
+.Nm dm2500
+.Nd emulators of classic serial terminals
+.Sh SYNOPSIS
+.Nm
+.Op Fl 2Bfr
+.Op Fl b Ar baudrate
+.Ar command Op Ar arguments ...
+.Sh DESCRIPTION
+These programs each emulate a classic serial character terminal.
+On startup they create a pseudo-terminal, run
+.Ar command
+attached to it, and render the terminal output in an SDL window
+using a period-correct character set with phosphor glow and
+scanline effects.
+.Bl -tag -width Ds
+.It Nm vt05
+DEC VT05, 72x20 characters.
+.It Nm vt50
+DEC VT50, 80x12 characters.
+.It Nm vt52
+DEC VT52, 80x24 characters.
+.It Nm dp3300
+DP3300 terminal, 72x25 characters.
+.It Nm gecon
+GECON console, 46x26 characters.
+.It Nm dm2500
+Datamedia Elite 2500, 80x24 characters.
+.El
+.Sh OPTIONS
+.Bl -tag -width Ds
+.It Fl b Ar baudrate
+Emulate the given line speed in bits per second.
+.It Fl B
+Send rubout (0x7F) instead of backspace when the backspace key
+is pressed.
+.It Fl f
+Start in fullscreen mode.
+.It Fl r
+Rerun
+.Ar command
+when it exits.
+.It Fl 2
+Scale the window by an extra factor of two.
+.It Fl a
+Only for
+.Nm dp3300 :
+use the TMS4100 character set instead of the default one.
+.El
+.Sh EXIT STATUS
+.Ex -std
+.Sh EXAMPLES
+Run
+.Xr sh 1
+on an emulated VT05 at 9600 baud:
+.Bd -literal -offset indent
+vt05 -b 9600 sh
+.Ed
+.Sh SEE ALSO
+.Xr xterm 1

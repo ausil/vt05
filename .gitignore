@@ -3,4 +3,7 @@ dp3300
 gecon
 vt05
 vt52
+vt50
 dm2500
+vt05-*.tar.gz
+build/
