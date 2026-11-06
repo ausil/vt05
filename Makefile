@@ -1,9 +1,11 @@
 all: vt05 vt52 vt50 dp3300 gecon dm2500
 BINARIES=vt05 vt52 vt50 dp3300 gecon dm2500
+NAME=vt05
 VERSION=1.0
-BUILDDIR=$(CURDIR)/build
-TARBALL=vt05-$(VERSION).tar.gz
-.PHONY: all clean dist rpm distclean
+TARBALL=$(NAME)-$(VERSION).tar.gz
+DIST_DIR=dist
+RPM_DIR=dist-rpm
+.PHONY: all clean dist rpm
 CC?=cc
 CFLAGS?=-O3
 WARN=-Wall -Wno-unused-parameter -Wno-parentheses -Wno-unused-result
@@ -21,16 +23,18 @@ gecon: gecon.c terminal.c dpchars.h args.h
 dm2500: dm2500.c terminal.c dmchars.h args.h
 	$(CC) $(CFLAGS) $(WARN) -fpie -pie -o dm2500 dm2500.c terminal.c $(DEPS)
 clean:
-	rm -f $(BINARIES)
+	-rm -f $(BINARIES)
+	-rm -rf $(DIST_DIR) $(RPM_DIR)
 
-dist: clean
-	git archive --prefix=vt05-$(VERSION)/ --format=tar HEAD | gzip > $(TARBALL)
+dist:
+	mkdir -p $(DIST_DIR)
+	git archive --prefix=$(NAME)-$(VERSION)/ --format=tar HEAD | gzip > $(DIST_DIR)/$(TARBALL)
 
 rpm: dist
-	rpmbuild -ba vt05.spec \
-		--define "_topdir $(BUILDDIR)" \
-		--define "_sourcedir $(CURDIR)" \
-		--define "_specdir $(CURDIR)"
-
-distclean: clean
-	rm -rf $(BUILDDIR) $(TARBALL)
+	mkdir -p $(RPM_DIR)
+	rpmbuild -ba \
+		--define "_sourcedir $(CURDIR)/$(DIST_DIR)" \
+		--define "_rpmdir $(CURDIR)/$(RPM_DIR)" \
+		--define "_srcrpmdir $(CURDIR)/$(RPM_DIR)" \
+		--define "_rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" \
+		$(NAME).spec

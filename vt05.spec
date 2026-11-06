@@ -6,7 +6,6 @@ License:        MIT
 URL:            https://github.com/aap/vt05
 # Produced by `make dist` (git archive) from this project.
 Source0:        %{name}-%{version}.tar.gz
-Source1:        %{name}.1
 
 BuildRequires:  gcc
 BuildRequires:  make
@@ -23,7 +22,7 @@ effects.
 %setup -q
 
 %build
-make %{?_smp_mflags}
+%make_build
 
 %check
 for bin in vt05 vt52 vt50 dp3300 gecon dm2500; do
@@ -35,7 +34,7 @@ rm -rf %{buildroot}
 install -d -m 0755 %{buildroot}%{_bindir}
 for bin in vt05 vt52 vt50 dp3300 gecon dm2500; do
     install -m 0755 ${bin} %{buildroot}%{_bindir}/${bin}
-    install -D -m 0644 %{SOURCE1} %{buildroot}%{_mandir}/man1/${bin}.1
+    install -Dm644 %{name}.1 %{buildroot}%{_mandir}/man1/${bin}.1
 done
 
 %files
